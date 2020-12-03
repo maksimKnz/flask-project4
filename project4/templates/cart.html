@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+<body>
+  {% include "menu.html" %}
+  <main class="container">
+    <h1 class="h3 my-4">Корзина</h1>
+    {% if del_msg == True %}
+    <div class="alert alert-warning" role="alert">Блюдо удалено из корзины</div>
+    {% endif %}
+    {% if is_logged == False %}
+    <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="/login/">войдите</a> или <a href="/register/">зарегистрируйтесь</a></div>
+    {% endif %}
+    {% if cart_info == None %}
+    <h4 class="alert alert-primary">В корзине пока ничего нет</h4>
+    {% else %}
+    <div class="row mt-5">
+
+
+        <div class="col-4">
+                    {% for field in form.errors %}
+              {% for message in form.errors[field] %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endfor %}
+          {% endfor %}
+          <form action="/cart/" method="POST">
+          <h4 class="">Ваши данные</h4>
+
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+              {{ form.name.label }}
+              {{ form.name (class="font-weight-bold form-control" )}}
+            </div>
+          </div>
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+              {{ form.address.label }}
+              {{ form.address (class="font-weight-bold form-control" )}}
+            </div>
+          </div>
+          <div class="md-4 form-label-group">
+              {{ form.mail.label }}
+              {{ form.mail (class="font-weight-bold form-control" )}}
+          </div>
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+              {{ form.phone.label }}
+              {{ form.phone (class="font-weight-bold form-control" )}}
+            </div>
+            {{form.order_summ}}
+            {{form.order_cart}}
+            {{ form.csrf_token }}
+          {% if is_logged == True %}
+          <button type="submit" class=" mt-3 mb-5 btn btn-danger">Оформить заказ</button>
+          {% endif %}
+
+          </form>
+        </div>
+
+          </div>
+
+
+
+
+      <div class="col-1"></div>
+      <div class="col-7">
+        {% if cart_info.count == 2 or cart_info.count == 3 or cart_info.count == 4 %}
+        {% set ok='а' %}
+        {% elif cart_info.count == 1 %}
+        {% set ok='о' %}
+        {% endif %}
+
+        <h4 class="mb-3 col-7 mb-5">{{cart_info.count}} блюд{{ok}} в корзине</h4>
+
+        <table class="table">
+          <tbody>
+          {% for meal in meals_on_cart %}
+            <tr>
+              <th scope="row">{{meal.title}}</th>
+              <td></td>
+              <td>{{count[meal.id]}}</td>
+              <td>{{meal.price}}</td>
+              <td><a class="text-danger" href="/delete/{{meal.id}}">Удалить</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        <hr>
+        <p class="display-4 my-2 ">{{cart_info.summ}} руб</p>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+
+{% endblock %}
+{% include "footer.html" %}
+

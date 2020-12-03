@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block container %}
+<body>
+  {% include "menu.html" %}
+  <main class="container">
+    <section class="row">
+      <div class="col-12 col-lg-8">
+        <h1 class="h3 my-5">Личный кабинет. Заказы</h1>
+                      {% for order in orders %}
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+
+              <div class="row">
+                <div class="col-10">
+                  <span class="h5 font-weight-bold">{{order.date.day}} {{month.get(order.date.month)}}</span>
+                  <span class="h5">- {{order.summ}} P</span>
+                </div>
+                <div class="col-2">
+                  <span class="badge badge-primary">{{order.status}}</span>
+
+                </div>
+              </div>
+            </li>
+
+            <div class="card-body">
+
+
+               <div class="row">
+                   {% for meal in order.meals %}
+                <p class="col-4 text-muted">{{meal.title}}</p>
+                <p class="col-2 text-muted"> 1</p>
+                <p class="col-6 text-muted"> {{meal.price}}</p>
+                {% endfor %}
+              </div>
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+      </div>
+    </section>
+  </main>
+  {% include "footer.html" %}
+
+{% endblock %}
